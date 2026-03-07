@@ -3,14 +3,21 @@ import {createServer} from 'node:http';
 import {Server} from 'socket.io';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import userRoutes from './src/routes/user.routes.js';
+import dotenv from 'dotenv';
 
 const app = express();
+dotenv.config();
 
 const server = createServer(app);
 
 const io = new Server(server);
 
 app.set("port", process.env.PORT || 8000);
+app.use(cors());
+app.use(express.json());
+app.use('/', userRoutes);
+app.use('/api/users', userRoutes);
 
 
 

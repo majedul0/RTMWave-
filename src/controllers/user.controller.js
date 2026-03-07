@@ -1,6 +1,7 @@
-import {httpStatus} from 'http-status';
+import httpStatus from 'http-status';
 import User from '../models/user.model.js';
-import bcrypt from 'bcryptjs';  
+import bcrypt from 'bcrypt';
+import crypto from 'node:crypto';
 
 const loginUser = async (req, res) => {
     try {
@@ -16,12 +17,13 @@ const loginUser = async (req, res) => {
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        let token = crypto.randomBytes(16).toString('hex');
-        user.token = token;
-        await user.save();
         if (!isPasswordValid) {
             return res.status(httpStatus.UNAUTHORIZED).json({message: 'Invalid email or password'});
         }
+
+        let token = crypto.randomBytes(16).toString('hex');
+        user.token = token;
+        await user.save();
 
         return res.status(httpStatus.OK).json({message: 'Login successful', token});
     } catch (error) {
