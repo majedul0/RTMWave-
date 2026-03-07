@@ -16,11 +16,14 @@ const loginUser = async (req, res) => {
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        let token = crypto.randomBytes(16).toString('hex');
+        user.token = token;
+        await user.save();
         if (!isPasswordValid) {
             return res.status(httpStatus.UNAUTHORIZED).json({message: 'Invalid email or password'});
         }
 
-        return res.status(httpStatus.OK).json({message: 'Login successful'});
+        return res.status(httpStatus.OK).json({message: 'Login successful', token});
     } catch (error) {
         console.error('Error logging in user:', error);
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({message: 'Server error'});    
