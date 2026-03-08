@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 
 const loginUser = async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body || {};
 
         if (!email || !password) {
             return res.status(httpStatus.BAD_REQUEST).json({message: 'Email and password are required'});
@@ -36,7 +36,7 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
     try {
-        const {name, username, email, password} = req.body;
+        const { name, username, email, password } = req.body || {};
 
         if (!name || !username || !email || !password) {
             return res.status(httpStatus.BAD_REQUEST).json({message: 'All fields are required'});
