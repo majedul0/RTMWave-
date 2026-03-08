@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 const meetingSchema = new mongoose.Schema({
+    meetingCode: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true,
+    },
     title: {
         type: String,
         required: true,
@@ -7,13 +13,17 @@ const meetingSchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    date: {
-        type: Date,
-        required: true,
+    host: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
-    time: {
-        type: String,
-        required: true,
+    scheduledAt: {
+        type: Date,
+        default: Date.now,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
     },
     participants: [{
         type: mongoose.Schema.Types.ObjectId,
